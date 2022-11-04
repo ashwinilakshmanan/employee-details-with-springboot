@@ -1,22 +1,34 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
+import EmployeeService from "../services/EmployeeService";
+import { useNavigate,Link } from "react-router-dom";
 
 const AddEmployeeComponent = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const navigate = useNavigate();
 
-  const saveEmployee=(event)=>{
+  const saveEmployee = (event) => {
     event.preventDefault();
 
-    const employee={firstName,lastName,email}
+    const employee = { firstName, lastName, email };
 
-    console.log(employee);
-  }
+    EmployeeService.createEmployee(employee)
+      .then((response) => {
+        console.log(response.data);
+
+        navigate("/employees");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div>
-        <br/><br/>
+      <br />
+      <br />
       <div className="container">
         <div className="row">
           <div className="card col-md-6 offset-md-3 offset-md-3">
@@ -59,7 +71,13 @@ const AddEmployeeComponent = () => {
                   />
                 </div>
 
-                <Button className="btn btn-success" onClick={(event)=>saveEmployee(event)}>Submit</Button>
+                <Button
+                  className="btn btn-success"
+                  onClick={(event) => saveEmployee(event)}
+                >
+                  Submit
+                </Button>
+                <Link to='/employees' className="btn btn-danger m-4">Cancel</Link>
               </form>
             </div>
           </div>
